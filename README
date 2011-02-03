@@ -82,6 +82,11 @@ Current project state
 How to test STMC2_Emulator.
 -----------------------------------------------------------------------------
 
+Server side:
+Simply type 'python STMC2_Emulator.py'
+
+
+Client side:
 First you need to install ST-Linux 2.3 on a linux platform.
 
 Open a terminal and go to '/opt/STM/STLinux-2.3/host/stmc/bin'
@@ -93,3 +98,8 @@ LD_LIBRARY_PATH=/opt/STM/STLinux-2.3/host/stmc/lib STMC_DEBUG=1 STTP_DEBUG=1 STM
 
 To launch sttpdebug for mb442 board with STMC2 Emulator on 192.168.0.10 type:
 LD_LIBRARY_PATH=/opt/STM/STLinux-2.3/host/stmc/lib STMC_DEBUG=1 STMC_RPC_DEBUG=1 STPY_DEBUG=1 ./sttpdebug.real 192.168.1.20:mb442:st40
+
+
+To test the emulator in real situation for mb442 board with STMC2 Emulator on 192.168.0.10 type:
+sh4-linux-gdb
+sh4tp 192.168.0.10:mb442:st40
