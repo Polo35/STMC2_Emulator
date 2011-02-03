@@ -34,13 +34,14 @@ class Hardware_Check_Server(object):
 			print '\nSTMC2 HW Check Server: Connected by', addr
 			# Receive Packet
 			Data = conn.recv(1024)
-			RecvPacket =  struct.unpack('128B', Data)
-			if RecvPacket[0] == 0xA:
-				print 'STMC2 HW Check Server: Sending HW type STMC2\n'
-				SendPacket  = struct.pack('5s', 'STMC2')
-				for i in range(5, 532):
-					SendPacket += struct.pack('B', 0)
-				conn.send(SendPacket)
+			if len(Data) == 128:
+				RecvPacket =  struct.unpack('128B', Data)
+				if RecvPacket[0] == 0xA:
+					print 'STMC2 HW Check Server: Sending HW type STMC2\n'
+					SendPacket  = struct.pack('5s', 'STMC2')
+					for i in range(5, 532):
+						SendPacket += struct.pack('B', 0)
+					conn.send(SendPacket)
 			conn.close()
 
 
