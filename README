@@ -1,0 +1,95 @@
+-----------------------------------------------------------------------------
+
+  Copyright 2011, Polo35
+  Licenced under Academic Free License version 3.0
+  Review STMC2_Emulator README & LICENSE files for further details.
+
+-----------------------------------------------------------------------------
+Introduction
+-----------------------------------------------------------------------------
+
+The goal of this project is to write an emulator for the ST Micro Connect 2.
+
+The ST Micro Connect 2 aka STMC2 box is used to connect boards based on ST Microelectronic socs over a JTAG interface.
+
+
+The STMC2 box is linux based and is wrote in python.
+So for convenience, the emulator will have to run on a linux platform, and will be written in python.
+
+ST Linux (http://www.stlinux.com) provide tools to handle the STMC2 box and is well documented.
+There is also some utilities for configuration and debugging.
+
+
+
+-----------------------------------------------------------------------------
+STMC2 Knowledge
+-----------------------------------------------------------------------------
+
+There is 3 distinct parts in the STMC2 box.
+
+- The Hardware check part.
+	A simple socket server started on port 9735, which return 'STMC2' when requested.
+
+- The System Manager part.
+	A XML RPC Server used to configure the STMC2 box.
+	It return informations on STMC2 states, firmware version, ...
+	It also manage the target manager.
+
+- The Target Manager part.
+	A XML RPC Server used to communicate with the soc.
+	It manage targetpacks used to describe a target system.
+	This is the big part, but we are lucky because a complet target manager is available in ST Linux.
+	Basicaly, it is charged of peek/poke, and Jtag lines handling.
+
+
+
+-----------------------------------------------------------------------------
+TargetPacks Knowledge
+-----------------------------------------------------------------------------
+
+Targetpacks are used to describe and operate on a specific board.
+
+There is 2 distinct parts in a targetpack.
+
+- The static part.
+	A set of xml files used to describe a specific board based on a specific soc.
+
+- The dynamic part.
+	A set of python files used to operate with a specific board based on a specific soc.
+
+ST Linux provide targetpacks for all ST socs, and good documentations describing them.
+
+
+
+-----------------------------------------------------------------------------
+Current project state
+-----------------------------------------------------------------------------
+
+- The Hardware check part.
+	Fully functional.
+
+- System manager part.
+	Largely acky, but work pretty well.
+
+- Target manager part.
+	Under test.
+	After analyzing the targetmanager provided by ST Linux, it appear that some driver need to be rewritten to handle peek/poke and Jtag lines.
+	But the biggest part wrote in python is available.
+
+
+
+-----------------------------------------------------------------------------
+How to test STMC2_Emulator.
+-----------------------------------------------------------------------------
+
+First you need to install ST-Linux 2.3 on a linux platform.
+
+Open a terminal and go to '/opt/STM/STLinux-2.3/host/stmc/bin'
+
+
+To launch stmcconfig with STMC2 Emulator on 192.168.0.10:
+LD_LIBRARY_PATH=/opt/STM/STLinux-2.3/host/stmc/lib STMC_DEBUG=1 STTP_DEBUG=1 STMC_RPC_DEBUG=1 ./stmcconfig.real --ip 192.168.1.20 --status
+
+
+To launch sttpdebug for mb442 board with STMC2 Emulator on 192.168.0.10 type:
+LD_LIBRARY_PATH=/opt/STM/STLinux-2.3/host/stmc/lib STMC_DEBUG=1 STMC_RPC_DEBUG=1 STPY_DEBUG=1 ./sttpdebug.real 192.168.1.20:mb442:st40
